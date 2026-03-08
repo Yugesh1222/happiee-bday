@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -2761,5 +2761,101 @@ function r3PrevReason() {
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>(function(){ emailjs.init("rQmdFGmi8ykxp812s"); })();</script>
+
+<script>
+(function() {
+  // ===== VISITOR TRACKER =====
+  // Replace this URL with your Google Apps Script Web App URL:
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxklzkx6qEcbxVMtnQzunapAPMWEH6w9jAYp3Lr7SKsmUigQW6m71r_oaEaZCIHus9h/exec';
+
+  // Fingerprint (unique browser ID)
+  function getFingerprint() {
+    var nav = navigator;
+    var str = [
+      nav.userAgent, nav.language, nav.platform,
+      screen.width + 'x' + screen.height,
+      new Date().getTimezoneOffset(),
+      nav.hardwareConcurrency || '',
+      nav.deviceMemory || ''
+    ].join('|');
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash).toString(36);
+  }
+
+  // Visit counter per fingerprint
+  var fp = getFingerprint();
+  var key = 'vc_' + fp;
+  var visits = parseInt(localStorage.getItem(key) || '0') + 1;
+  localStorage.setItem(key, visits);
+
+  // Device detection
+  var ua = navigator.userAgent;
+  var device = /Mobi|Android/i.test(ua) ? 'Mobile'
+             : /Tablet|iPad/i.test(ua) ? 'Tablet' : 'Desktop';
+  var os = /Windows/i.test(ua) ? 'Windows'
+         : /Mac/i.test(ua) ? 'Mac'
+         : /iPhone|iPad/i.test(ua) ? 'iOS'
+         : /Android/i.test(ua) ? 'Android'
+         : /Linux/i.test(ua) ? 'Linux' : 'Unknown';
+  var browser = /Chrome/i.test(ua) && !/Edg/i.test(ua) ? 'Chrome'
+              : /Firefox/i.test(ua) ? 'Firefox'
+              : /Safari/i.test(ua) && !/Chrome/i.test(ua) ? 'Safari'
+              : /Edg/i.test(ua) ? 'Edge'
+              : /OPR/i.test(ua) ? 'Opera' : 'Other';
+
+  // Fetch IP + location then send
+  fetch('https://ipapi.co/json/')
+    .then(function(r) { return r.json(); })
+    .then(function(geo) {
+      var payload = {
+        timestamp: new Date().toISOString(),
+        ip:          geo.ip         || 'Unknown',
+        country:     geo.country_name || 'Unknown',
+        city:        geo.city        || 'Unknown',
+        region:      geo.region      || 'Unknown',
+        isp:         geo.org         || 'Unknown',
+        timezone:    geo.timezone    || 'Unknown',
+        device:      device,
+        os:          os,
+        browser:     browser,
+        screen:      screen.width + 'x' + screen.height,
+        fingerprint: fp,
+        visits:      visits,
+        referrer:    document.referrer || 'Direct',
+        page:        window.location.href
+      };
+      // Send to Google Sheets
+      fetch(WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    })
+    .catch(function() {
+      // Fallback: send without geo data
+      fetch(WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          ip:'Unknown', country:'Unknown', city:'Unknown',
+          region:'Unknown', isp:'Unknown', timezone:'Unknown',
+          device:device, os:os, browser:browser,
+          screen: screen.width+'x'+screen.height,
+          fingerprint:fp, visits:visits,
+          referrer: document.referrer||'Direct',
+          page: window.location.href
+        })
+      });
+    });
+})();
+</script>
+
 </body>
 </html>
