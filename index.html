@@ -11,7 +11,7 @@
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="bingbot" content="noindex, nofollow">
 
- 
+  
 
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=Dancing+Script:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -2161,7 +2161,7 @@ button:hover::before { opacity: 1; }
       or "<span style="color:rgba(232,200,138,0.9); font-weight:500;">wish pannu yugi</span>" nu sollu 🎀
     </p>
 
-    <button onclick="scrollToSection('memories')" style="margin-top:24px;">Next &nbsp;🤍</button>
+    <button onclick="scrollToSection('tamilpoem')" style="margin-top:24px;">Next &nbsp;🤍</button>
   </div>
 </section>
 
@@ -2188,6 +2188,166 @@ button:hover::before { opacity: 1; }
     <button onclick="closeVoiceWish()" style="margin-top:0;">Close &nbsp;🤍</button>
   </div>
 </div>
+
+<!-- ===== TAMIL POEM SECTION ===== -->
+<section id="tamilpoem">
+  <div class="container" id="tamilPoemCard">
+    <div style="font-size:36px; margin-bottom:10px; animation:stickerPulse 2.8s ease-in-out infinite;">💫</div>
+    <div class="divider"></div>
+
+    <div id="tamilPoemLines" style="margin: 22px 0 10px; text-align:center; min-height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;">
+    </div>
+
+    <button onclick="scrollToSection('memories')" id="tamilPoemNextBtn" style="margin-top:24px; opacity:0; transition:opacity 0.8s ease;">Next &nbsp;🤍</button>
+  </div>
+</section>
+
+<style>
+.poem-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(14px, 3.5vw, 18px);
+  font-style: italic;
+  color: rgba(253,232,239,0.0);
+  line-height: 1.75;
+  letter-spacing: 0.02em;
+  min-height: 1.75em;
+  text-align: center;
+  transition: color 0.4s ease;
+}
+
+.poem-line.typing {
+  color: rgba(253,232,239,0.9);
+}
+
+.poem-line .poem-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: rgba(244,160,180,0.85);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  border-radius: 2px;
+  animation: blinkCursor 0.75s step-end infinite;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.poem-line.done .poem-cursor {
+  display: none;
+}
+
+.poem-line.last-line {
+  background: linear-gradient(135deg, var(--gold-light), var(--rose), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 14px rgba(244,160,180,0.5));
+  color: unset;
+}
+
+.poem-line.last-line.typing {
+  color: unset;
+}
+</style>
+
+<script>
+(function() {
+  const poemLines = [
+    "உனக்காதான் என் தேடல்…!",
+    "உனக்காதான் என் பிறவி…!",
+    "உன்னை பார்க்கும் நொடிகளுக்காக…",
+    "சில ஆயிரம் தடவையாவது இறந்து…",
+    "ஒருமுறை பிறப்பதற்கு…",
+    "ஜென்ம ஜென்மமாக காத்திருக்கிறேன்… 💫"
+  ];
+
+  function splitGraphemes(str) {
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+      const seg = new Intl.Segmenter('ta', { granularity: 'grapheme' });
+      return Array.from(seg.segment(str), s => s.segment);
+    }
+    return Array.from(str);
+  }
+
+  function buildLines() {
+    const container = document.getElementById('tamilPoemLines');
+    if (!container) return;
+    container.innerHTML = '';
+    poemLines.forEach((text, i) => {
+      const div = document.createElement('div');
+      div.className = 'poem-line' + (i === poemLines.length - 1 ? ' last-line' : '');
+      div.id = 'pline-' + i;
+
+      const span = document.createElement('span');
+      span.id = 'ptext-' + i;
+      div.appendChild(span);
+
+      const cursor = document.createElement('span');
+      cursor.className = 'poem-cursor';
+      div.appendChild(cursor);
+
+      container.appendChild(div);
+    });
+  }
+
+  function typeLine(lineIdx, onDone) {
+    const lineEl = document.getElementById('pline-' + lineIdx);
+    const textEl = document.getElementById('ptext-' + lineIdx);
+    if (!lineEl || !textEl) { if (onDone) onDone(); return; }
+
+    lineEl.classList.add('typing');
+    const chars = splitGraphemes(poemLines[lineIdx]);
+    let i = 0;
+
+    function next() {
+      if (i < chars.length) {
+        textEl.textContent += chars[i];
+        i++;
+        setTimeout(next, 55 + Math.random() * 35);
+      } else {
+        lineEl.classList.add('done');
+        if (onDone) setTimeout(onDone, 280);
+      }
+    }
+    next();
+  }
+
+  function typeAllLines(idx) {
+    if (idx >= poemLines.length) {
+      // All done — show next button
+      const btn = document.getElementById('tamilPoemNextBtn');
+      if (btn) btn.style.opacity = '1';
+      return;
+    }
+    typeLine(idx, () => typeAllLines(idx + 1));
+  }
+
+  function startPoem() {
+    buildLines();
+    setTimeout(() => typeAllLines(0), 600);
+  }
+
+  // Start when section scrolls into view
+  const section = document.getElementById('tamilpoem');
+  if (!section) return;
+
+  let started = false;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        startPoem();
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  obs.observe(section);
+})();
+</script>
 
 <!-- ===== MEMORIES SECTION ===== -->
 <section id="memories">
