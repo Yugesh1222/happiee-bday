@@ -15,6 +15,16 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&family=Dancing+Script:wght@400;500;600&display=swap" rel="stylesheet">
 
+  <!-- ===== PRELOAD STICKERS (fast appear, no pop-in) ===== -->
+  <link rel="preload" href="stricker%202.png" as="image">
+  <link rel="preload" href="stricker5.png" as="image">
+  <link rel="preload" href="stricker%201.png" as="image">
+  <link rel="preload" href="stricker%203.png" as="image">
+  <!-- ===== PRELOAD KEY IMAGES ===== -->
+  <link rel="preload" href="bph.png" as="image">
+  <!-- ===== PRELOAD AUDIO ===== -->
+  <link rel="preload" href="rakshi%20bday%20song.mp3" as="audio" type="audio/mpeg">
+
 <style>
 /* ===== DESIGN TOKENS ===== */
 :root {
@@ -2053,7 +2063,7 @@ button:hover::before { opacity: 1; }
 </div>
 
 <audio id="bgMusic" loop>
-  <source src="rakshi bday song.mp3" type="audio/mpeg">
+  <source src="rakshi%20bday%20song.mp3" type="audio/mpeg">
 </audio>
 
 <!-- ===== HOME SECTION ===== -->
@@ -2064,7 +2074,7 @@ button:hover::before { opacity: 1; }
     <p>I didn't want this day to pass quietly.</p>
     <p>So I made something small. Just for you.</p>
     <button onclick="openBirthday()">Open &nbsp;🤌🏻</button>
-    <img src="stricker 2.png" class="sectionSticker">
+    <img src="stricker%202.png" class="sectionSticker">
   </div>
 </section>
 
@@ -2374,7 +2384,7 @@ button:hover::before { opacity: 1; }
     <p class="dropText">And I just smile 🙂</p>
     <p class="dropText">That's enough for me 🫶🏻</p>
     <p class="dropText">Just memory 🫶🏻</p>
-    <img src="stricker 1.png" class="sectionSticker">
+    <img src="stricker%201.png" class="sectionSticker">
     <button onclick="scrollToSection('photo3d')">Next &nbsp;✨</button>
   </div>
 </section>
@@ -2537,27 +2547,27 @@ button:hover::before { opacity: 1; }
     <div class="divider"></div>
     <div class="us-grid">
       <div class="video-box">
-        <video src="video 1.mp4" muted loop playsinline preload="none" onclick="openUsVideo(this)"></video>
+        <video src="video1.mp4" muted loop playsinline preload="metadata" onclick="openUsVideo(this)"></video>
         <p class="video-label">First Meet 💕</p>
       </div>
       <div class="video-box">
-        <video src="memory-video.mp4" muted loop playsinline preload="none" onclick="openUsVideo(this)"></video>
+        <video src="memory-video.mp4" muted loop playsinline preload="metadata" onclick="openUsVideo(this)"></video>
         <p class="video-label">Date 🌙</p>
       </div>
       <div class="video-box">
-        <video src="video3.mp4" muted loop playsinline preload="none" onclick="openUsVideo(this)"></video>
+        <video src="video3.mp4" muted loop playsinline preload="metadata" onclick="openUsVideo(this)"></video>
         <p class="video-label">Walk ✨</p>
       </div>
       <div class="video-box">
-        <video src="video4.mp4" muted loop playsinline preload="none" onclick="openUsVideo(this)"></video>
+        <video src="video4.mp4" muted loop playsinline preload="metadata" onclick="openUsVideo(this)"></video>
         <p class="video-label">Holding 🤍</p>
       </div>
       <div class="video-box">
-        <video src="video 5.mp4" muted loop playsinline preload="none" onclick="openUsVideo(this)"></video>
+        <video src="video5.mp4" muted loop playsinline preload="metadata" onclick="openUsVideo(this)"></video>
         <p class="video-label">Smile 🫶🏻</p>
       </div>
       <div class="video-box">
-        <video src="video6.mp4" muted loop playsinline preload="none" onclick="openUsVideo(this)"></video>
+        <video src="video6.mp4" muted loop playsinline preload="metadata" onclick="openUsVideo(this)"></video>
         <p class="video-label">Saturday 💗</p>
       </div>
     </div>
@@ -2580,7 +2590,7 @@ button:hover::before { opacity: 1; }
       <div class="tl-line-track">
         <div class="tl-line-fill" id="tlLineFill"></div>
       </div>
-      <img src="stricker 3.png" class="tl-sticker" id="tlSticker">
+      <img src="stricker%203.png" class="tl-sticker" id="tlSticker">
 
       <div class="tl-stop" id="stop0">
         <div class="tl-spacer"></div>
